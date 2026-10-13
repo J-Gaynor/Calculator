@@ -1,0 +1,22 @@
+.header {
+    margin: 2px;
+    padding: 0px;
+    border-bottom: 1px black solid;
+    text-align: center;
+}
+
+.calculator-container {
+    border: 2px solid black;
+    width: 60%;
+    flex-direction: column;
+}
+
+.total-container {
+    border: 1px black solid;
+}
+
+@media (max-width: 768px) {
+    .calculator-container {
+        width: 100%;
+    }
+}
