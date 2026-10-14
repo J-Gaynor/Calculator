@@ -20,7 +20,6 @@ function populateNumbers() {
 
 populateNumbers();
 const buttons = Array.from(document.getElementsByClassName("btn"));
-console.log(buttons);
 
 function displayPress(e) {
     total.textContent += e.target.value
@@ -31,6 +30,9 @@ buttons.forEach((btn) => {
         switch (btn.value) {
             case "clear":
                 total.textContent = "0";
+                break;
+            case "=":
+                operate(total.textContent);
                 break;
             default:
                 console.log(total.textContent)
@@ -49,6 +51,7 @@ buttons.forEach((btn) => {
 
 // Basic functions
 function add(a, b) {
+
     return a + b;
 }
 
@@ -65,22 +68,24 @@ function divide(a, b) {
 }
 
 // Operate function
-function operate(a, b, operation) {
+function operate(expression) {
+    console.log(expression);
+    let [a, operation, b] = expression.split(/([+\-*\/])/);
+    firstNumber = parseInt(a);
+    secondNumber = parseInt(b);
+    console.log(a, operation, b);
     switch (operation) {
         case "+":
-            add(a, b);
+            total.textContent = add(firstNumber, secondNumber);
             break;
         case "-":
-            subtract(a, b);
+            total.textContent = subtract(firstNumber, secondNumber);
             break;
         case "*":
-            multiply(a, b);
+            total.textContent = multiply(firstNumber, secondNumber);
             break;
         case "/":
-            divide(a, b);
-        case "=":
-            total.textContent = operate(a, b, operation);
-        case "clear":
-            total.textContent = 0;
+            total.textContent = divide(firstNumber, secondNumber);
+            break;
     }
 }
