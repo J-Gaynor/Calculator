@@ -3,17 +3,19 @@ const total = document.getElementById("total")
 const numbersContainer = document.querySelector(".numbers-container");
 
 function populateNumbers() {
-    let counter = 0;
+    let counter = 9;
     for (let i = 0; i < 4; i++) {
+        let numberRow = document.createElement("div");
         for (let j = 0; j < 3; j++) {
-            if (counter < 10) {
+            if (counter >= 0) {
                 const numberButton = document.createElement("button");
-                numberButton.classList.add("btn");
+                numberButton.classList.add("btn", "number-btn");
                 numberButton.textContent = counter;
                 numberButton.value = counter;
-                numbersContainer.appendChild(numberButton);
-                counter++;
+                numberRow.prepend(numberButton);
+                counter--;
             }
+            numbersContainer.append(numberRow);
         }
     }
 }

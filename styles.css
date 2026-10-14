@@ -15,6 +15,42 @@
     border: 1px black solid;
 }
 
+#total {
+    margin-left: 8px;
+}
+
+.buttons-container {
+    display: flex;
+    text-align: center;
+    flex-wrap: wrap;
+    padding: 8px 8px 0px 8px;
+    justify-content: space-between;
+}
+
+.btn {
+    margin-bottom: 8px;
+}
+
+.number-btn {
+    min-width: 33%;
+}
+
+.operation-btn {
+    min-width: 40%;
+}
+
+.numbers-container {
+    width: 60%;
+}
+
+.operations-container {
+    justify-content: end;
+    align-content: start;
+    display: flex;
+    flex-wrap: wrap;
+    width: 35%;
+}
+
 @media (max-width: 768px) {
     .calculator-container {
         width: 100%;
