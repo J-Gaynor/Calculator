@@ -1,6 +1,7 @@
 let firstNumber, secondNumber, operation;
 const total = document.getElementById("total")
 const numbersContainer = document.querySelector(".numbers-container");
+const operators = /([+\-*\/])/;
 
 function populateNumbers() {
     let counter = 9;
@@ -23,37 +24,60 @@ function populateNumbers() {
 populateNumbers();
 const buttons = Array.from(document.getElementsByClassName("btn"));
 
-function displayPress(e) {
-    total.textContent += e.target.value
+function displayPress(appendText) {
+    total.textContent += appendText
 }
 
 buttons.forEach((btn) => {
     btn.addEventListener("click", function () {
+        if (total.textContent === "0" && parseInt(btn.value)) {
+            total.textContent = btn.value;
+        } else if (btn.value !== "=") {
+            displayPress(btn.value);
+        }
         switch (btn.value) {
             case "clear":
                 total.textContent = "0";
                 break;
             case "=":
-                operate(total.textContent);
-                break;
-            default:
-                console.log(total.textContent)
-                if (total.textContent === "0") {
-                    total.textContent = btn.value;
+                if (multipleOperators(total.textContent)) {
+                    break;
                 } else {
-                    console.log(total.textContent, btn.value)
-                    total.textContent += btn.value;
+                    if (operate(total.textContent) === false) {
+                        break;
+                    };
+                    operate(total.textContent);
+                    break;
                 }
+            case "+":
+            case "-":
+            case "*":
+            case "/":
+                if (multipleOperators(total.textContent)) {
+                    operate(total.textContent);
+                    displayPress(btn.value);
+                }
+                break;
         }
     })
 })
 
-
-
+function multipleOperators(expression) {
+    let count = 0;
+    for (char in expression) {
+        if (operators.test(expression[char])) {
+            count++;
+        }
+    }
+    if (count > 1) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 // Basic functions
 function add(a, b) {
-
     return a + b;
 }
 
@@ -71,11 +95,15 @@ function divide(a, b) {
 
 // Operate function
 function operate(expression) {
-    console.log(expression);
-    let [a, operation, b] = expression.split(/([+\-*\/])/);
+    // Get the calculation values
+    let [a, operation, b] = expression.split(operators);
+
+    if (!a || !operation || !b) {
+        return false;
+    }
+
     firstNumber = parseInt(a);
     secondNumber = parseInt(b);
-    console.log(a, operation, b);
     switch (operation) {
         case "+":
             total.textContent = add(firstNumber, secondNumber);
