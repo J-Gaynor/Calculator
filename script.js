@@ -4,21 +4,38 @@ const numbersContainer = document.querySelector(".numbers-container");
 const operators = /([+\-*\/])/;
 
 function populateNumbers() {
-    let counter = 9;
+    let counter = 11;
     for (let i = 0; i < 4; i++) {
         let numberRow = document.createElement("div");
         for (let j = 0; j < 3; j++) {
-            if (counter >= 0) {
-                const numberButton = document.createElement("button");
-                numberButton.classList.add("btn", "number-btn");
-                numberButton.textContent = counter;
-                numberButton.value = counter;
-                numberRow.prepend(numberButton);
+            if (counter > 2) {
+                numberRow.prepend(createNumberButton(counter - 2));
+                counter--;
+            } else if (counter === 2) {
+                numberRow.append(createNumberButton(0));
+                counter--;
+            } else if (counter === 1) {
+                numberRow.append(createNumberButton("."));
+                counter--;
+            } else {
+                numberRow.append(createNumberButton("DEL"));
                 counter--;
             }
             numbersContainer.append(numberRow);
         }
     }
+}
+
+function backSpace() {
+    total.textContent = total.textContent.slice(0, -1);
+}
+
+function createNumberButton(value) {
+    const numberButton = document.createElement("button");
+    numberButton.classList.add("btn", "number-btn");
+    numberButton.textContent = value;
+    numberButton.value = value;
+    return numberButton;
 }
 
 populateNumbers();
@@ -28,12 +45,27 @@ function displayPress(appendText) {
     total.textContent += appendText
 }
 
+function consecutiveOperators(expression) {
+    if (operators.test(expression[expression.length - 1])) {
+        return true;
+    }
+}
+
 buttons.forEach((btn) => {
     btn.addEventListener("click", function () {
-        if (total.textContent === "0" && parseInt(btn.value)) {
+        if (btn.value === "DEL") {
+            if (total.textContent.length > 1) {
+                backSpace();
+            } else {
+                total.textContent = "0";
+            }
+            return;
+        } else if (total.textContent === "0" && parseInt(btn.value)) {
             total.textContent = btn.value;
         } else if (btn.value !== "=") {
-            displayPress(btn.value);
+            if (!operators.test(btn.value)) {
+                displayPress(btn.value);
+            }
         }
         switch (btn.value) {
             case "clear":
@@ -43,9 +75,6 @@ buttons.forEach((btn) => {
                 if (multipleOperators(total.textContent)) {
                     break;
                 } else {
-                    if (operate(total.textContent) === false) {
-                        break;
-                    };
                     operate(total.textContent);
                     break;
                 }
@@ -53,7 +82,11 @@ buttons.forEach((btn) => {
             case "-":
             case "*":
             case "/":
-                if (multipleOperators(total.textContent)) {
+                if (consecutiveOperators(total.textContent)) {
+                    let futureTotal = total.textContent.slice(0, -1);
+                    futureTotal += btn.value;
+                    total.textContent = futureTotal;
+                } else {
                     operate(total.textContent);
                     displayPress(btn.value);
                 }
@@ -70,7 +103,11 @@ function multipleOperators(expression) {
         }
     }
     if (count > 1) {
-        return true;
+        if (count === 2 && expression[0] === "-") {
+            return false
+        } else {
+            return true;
+        }
     } else {
         return false;
     }
@@ -90,20 +127,32 @@ function multiply(a, b) {
 }
 
 function divide(a, b) {
+    if (b === 0 || b === -0) {
+        alert("Not today ;)")
+        return 0;
+    }
     return a / b;
 }
 
 // Operate function
 function operate(expression) {
     // Get the calculation values
-    let [a, operation, b] = expression.split(operators);
+    let a, operation, b;
+    if (expression.startsWith("-")) {
+        let parts = expression.slice(1).split(operators);
+        a = "-" + parts[0];
+        operation = parts[1];
+        b = parts[2];
+    } else {
+        [a, operation, b] = expression.split(operators);
+    }
 
     if (!a || !operation || !b) {
         return false;
     }
 
-    firstNumber = parseInt(a);
-    secondNumber = parseInt(b);
+    firstNumber = parseFloat(a);
+    secondNumber = parseFloat(b);
     switch (operation) {
         case "+":
             total.textContent = add(firstNumber, secondNumber);
