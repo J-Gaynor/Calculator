@@ -51,9 +51,48 @@ function consecutiveOperators(expression) {
     }
 }
 
+function doubleDecimal(expression) {
+    let count = 0;
+    let firstNumber, operation, secondNumber;
+    let parts = expression.slice(1).split(operators);
+    firstNumber = parts[0];
+    operation = parts[1];
+    secondNumber = parts[2];
+    console.log(firstNumber, operation, secondNumber)
+    if (operation) {
+        for (const char of secondNumber) {
+            console.log(char)
+            if (char === ".") {
+                count++;
+            }
+        }
+        if (count > 0) {
+            console.log(false)
+            return false;
+        }
+        count = 0;
+    } else {
+        for (const char of firstNumber) {
+            console.log(char)
+            if (char === ".") {
+                count++;
+            }
+        }
+        console.log(count)
+        if (count > 0) {
+            console.log(false)
+            return false;
+        }
+    }
+    console.log(true)
+    return true;
+}
+
 buttons.forEach((btn) => {
     btn.addEventListener("click", function () {
-        if (btn.value === "DEL") {
+        if (btn.value === "." && !doubleDecimal(total.textContent)) {
+            return;
+        } else if (btn.value === "DEL") {
             if (total.textContent.length > 1) {
                 backSpace();
             } else {
@@ -90,6 +129,8 @@ buttons.forEach((btn) => {
                     operate(total.textContent);
                     displayPress(btn.value);
                 }
+                break;
+            default:
                 break;
         }
     })
