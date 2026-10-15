@@ -51,6 +51,23 @@ function consecutiveOperators(expression) {
     }
 }
 
+document.addEventListener("keydown", function (e) {
+    console.log(e.key)
+    if (parseInt(e.key) > 0) {
+        checkValidButton({ value: e.key });
+    } else if (e.key === "Backspace") {
+        checkValidButton({ value: "DEL" });
+    } else if (e.key === "Enter") {
+        checkValidButton({ value: "=" });
+    }
+    else if (e.key === ".") {
+        checkValidButton({ value: "." });
+    } else if (operators.test(e.key)) {
+        checkValidButton({ value: e.key });
+    }
+    // checkValidButton(e);
+})
+
 function doubleDecimal(expression) {
     let count = 0;
     let firstNumber, operation, secondNumber;
@@ -58,83 +75,28 @@ function doubleDecimal(expression) {
     firstNumber = parts[0];
     operation = parts[1];
     secondNumber = parts[2];
-    console.log(firstNumber, operation, secondNumber)
     if (operation) {
         for (const char of secondNumber) {
-            console.log(char)
             if (char === ".") {
                 count++;
             }
         }
         if (count > 0) {
-            console.log(false)
             return false;
         }
         count = 0;
     } else {
         for (const char of firstNumber) {
-            console.log(char)
             if (char === ".") {
                 count++;
             }
         }
-        console.log(count)
         if (count > 0) {
-            console.log(false)
             return false;
         }
     }
-    console.log(true)
     return true;
 }
-
-buttons.forEach((btn) => {
-    btn.addEventListener("click", function () {
-        if (btn.value === "." && !doubleDecimal(total.textContent)) {
-            return;
-        } else if (btn.value === "DEL") {
-            if (total.textContent.length > 1) {
-                backSpace();
-            } else {
-                total.textContent = "0";
-            }
-            return;
-        } else if (total.textContent === "0" && parseInt(btn.value)) {
-            total.textContent = btn.value;
-        } else if (btn.value !== "=") {
-            if (!operators.test(btn.value)) {
-                displayPress(btn.value);
-            }
-        }
-        switch (btn.value) {
-            case "clear":
-                total.textContent = "0";
-                break;
-            case "=":
-                if (multipleOperators(total.textContent)) {
-                    break;
-                } else {
-                    operate(total.textContent);
-                    break;
-                }
-            case "+":
-            case "-":
-            case "*":
-            case "/":
-                if (consecutiveOperators(total.textContent)) {
-                    let futureTotal = total.textContent.slice(0, -1);
-                    futureTotal += btn.value;
-                    total.textContent = futureTotal;
-                } else {
-                    operate(total.textContent);
-                    displayPress(btn.value);
-                }
-                break;
-            default:
-                break;
-        }
-    })
-})
 
 function multipleOperators(expression) {
     let count = 0;
@@ -209,3 +171,54 @@ function operate(expression) {
             break;
     }
 }
+
+function checkValidButton(btn) {
+    console.log(btn);
+    if (btn.value === "." && !doubleDecimal(total.textContent)) {
+        return;
+    } else if (btn.value === "DEL") {
+        if (total.textContent.length > 1) {
+            backSpace();
+        } else {
+            total.textContent = "0";
+        }
+        return;
+    } else if (total.textContent === "0" && parseInt(btn.value)) {
+        total.textContent = btn.value;
+    } else if (btn.value !== "=") {
+        if (!operators.test(btn.value)) {
+            displayPress(btn.value);
+        }
+    }
+    switch (btn.value) {
+        case "clear":
+            total.textContent = "0";
+            break;
+        case "=":
+            if (multipleOperators(total.textContent)) {
+                break;
+            } else {
+                operate(total.textContent);
+                break;
+            }
+        case "+":
+        case "-":
+        case "*":
+        case "/":
+            if (consecutiveOperators(total.textContent)) {
+                let futureTotal = total.textContent.slice(0, -1);
+                futureTotal += btn.value;
+                total.textContent = futureTotal;
+            } else {
+                operate(total.textContent);
+                displayPress(btn.value);
+            }
+            break;
+        default:
+            break;
+    }
+}
+
+buttons.forEach((btn) => {
+    btn.addEventListener("click", () => checkValidButton(btn))
+})
