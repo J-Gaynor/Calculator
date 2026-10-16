@@ -52,8 +52,7 @@ function consecutiveOperators(expression) {
 }
 
 document.addEventListener("keydown", function (e) {
-    console.log(e.key)
-    if (parseInt(e.key) > 0) {
+    if (parseInt(e.key) >= 0) {
         checkValidButton({ value: e.key });
     } else if (e.key === "Backspace") {
         checkValidButton({ value: "DEL" });
@@ -65,7 +64,6 @@ document.addEventListener("keydown", function (e) {
     } else if (operators.test(e.key)) {
         checkValidButton({ value: e.key });
     }
-    // checkValidButton(e);
 })
 
 function doubleDecimal(expression) {

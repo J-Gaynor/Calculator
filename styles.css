@@ -6,17 +6,53 @@
 }
 
 .calculator-container {
+    margin: 128px auto;
     border: 2px solid black;
-    width: 60%;
+    border-radius: 15px;
+    width: 25%;
     flex-direction: column;
+    background-color: #23242f;
+    box-sizing: border-box;
+    display: flex;
+    height: 320px;
 }
 
 .total-container {
-    border: 1px black solid;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px 8px 0px 8px;
+    margin-bottom: 20px;
+}
+
+#brand {
+    color: white;
+    white-space: nowrap;
+    font-family: "DIN Alternate", "Bahnschrift", sans-serif;
 }
 
 #total {
-    margin-left: 8px;
+    font-family: Consolas, Menlo, Monaco, monospace;
+    padding: 0;
+    margin: 0;
+}
+
+.delete {
+    background-color: #d9804b !important;
+}
+
+#display-zone {
+    background-color: #CEDCDD;
+    width: 75%;
+    margin-left: auto;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: 4px;
+    box-sizing: border-box;
 }
 
 .buttons-container {
@@ -28,19 +64,28 @@
 }
 
 .btn {
-    margin-bottom: 8px;
+    background-color: #23242f;
+    color: white;
+    aspect-ratio: 1;
+    border-radius: 25%;
 }
 
 .number-btn {
-    min-width: 33%;
+    min-width: 25%;
 }
 
 .operation-btn {
     min-width: 40%;
+    height: 27%;
 }
 
 .numbers-container {
     width: 60%;
+}
+
+.numbers-container>div {
+    display: flex;
+    gap: 8px;
 }
 
 .operations-container {
@@ -49,10 +94,25 @@
     display: flex;
     flex-wrap: wrap;
     width: 35%;
+    gap: 8px;
 }
 
 @media (max-width: 768px) {
     .calculator-container {
-        width: 100%;
+        width: 80%;
+        min-width: 280px;
+    }
+}
+
+@media (max-width: 1166px) {
+    .calculator-container {
+        width: 35%;
+    }
+}
+
+
+@media (max-width: 832px) {
+    .calculator-container {
+        width: 40%;
     }
 }
